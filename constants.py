@@ -1,0 +1,1 @@
+# gloal file for constants. we can add more specific constant files later on - e.g. exchnage_constants.py

@@ -1,0 +1,1 @@
+# websocket for receiving current prices from exchange. on each new message, tick strategy
