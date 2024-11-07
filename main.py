@@ -8,6 +8,5 @@ def on_message(message):
 
 if __name__ == "__main__":
     exchange_rest = ExchangeRest()
-    print(get_bollinger_bands(exchange_rest.get_historical_ohlc(), 20)[2])
-    # strategy = Strategy(exchange_rest.get_historical_ohlc())
-    # exchange_websocket = ExchangeWebsocket(strategy.on_exchange_ws_message)
+    strategy = Strategy(exchange_rest.get_historical_ohlc())
+    exchange_websocket = ExchangeWebsocket(strategy.on_exchange_ws_message)
