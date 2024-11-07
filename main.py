@@ -1,10 +1,6 @@
 from exchange.exchange_websocket import ExchangeWebsocket 
 from strategy.strategy import Strategy
 from exchange.exchange_rest import ExchangeRest
-from technical_analysis.bollinger_bands import get_bollinger_bands
-
-def on_message(message):
-    print(message)
 
 if __name__ == "__main__":
     exchange_rest = ExchangeRest()
