@@ -1,1 +1,0 @@
-# our "broker" who is responsible for making the transactions on the exchange
