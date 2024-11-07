@@ -1,5 +1,6 @@
 # websocket for receiving current prices from exchange. on each new message, tick strategy
 from binance import Client, ThreadedWebsocketManager, ThreadedDepthCacheManager
+import credentials
 
 client=Client(credentials.getBinanceKey(), credentials.getBinanceSecretKey())
 twm = ThreadedWebsocketManager(api_key=credentials.getBinanceKey(), api_secret=credentials.getBinanceSecretKey())
