@@ -11,7 +11,8 @@ class Strategy:
         self.is_in_long = False
         self.stop_loss = None
         self.quantity = None
-        self.margin = None
+        self.capital_at_risk=0.03
+        self.leverage = 6
 
     def on_exchange_ws_message(self, message):
         if message['x']:
@@ -55,4 +56,11 @@ class Strategy:
                 self.stop_loss = bollinger_bands_last_bottom_price
 
     def __set_quantity(self):
-        1
+        # a toke hany szazalekaval nyitunk poziciot, 0 es (100*leverage) % kozotti ertek
+        position_size_pct_of_capital = self.capital_at_risk / (1 - self.stop_loss / self.ohlc[-1, Candle.CLOSE])
+        usdc_capital = ExchangeRest.futures_usdc_balance 
+        # ezt nem tudom honnan kéne, elkezdtem az ExchangeRest classban egy új attribútumot (?), 
+        # de nem vagyok benne biztos h igy kéne, pls gondold már át te is.
+        # vagy behivni a get_futures_usdc_balance fuggvenyt csak az kicsit lassithat a pozinyitásunkon
+        position_size = position_size_pct_of_capital * usdc_capital
+        return position_size
