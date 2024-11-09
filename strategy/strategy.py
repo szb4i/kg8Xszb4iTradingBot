@@ -29,33 +29,30 @@ class Strategy:
 
     def __open_long_position(self):
         if self.ema_21[-2] < self.ema_55[-2] and self.ema_21[-1] > self.ema_55[-1]:
-            # TODO
-            # 1. stoploss meghatarozasa: bollinger bands also
             self.__set_stop_loss()
-            # 2. quantity es margin szamitasa
             self.__set_quantity()
+            # TODO
             # 3. pozi megnyitasa
             # 4. nyitott pozicio managelese. on_message-ben ha poziban vagy, akkor minden message-re csekkolod, hogy le kell-e zarni. vagy trailing stop loss, ha jo iranyba megy
             # 5. logolas, email kuldes
             # 6. backtest
 
     def __set_stop_loss(self):
-        threshold_bottom = 0.01
-        threshold_top = 0.05
+        threshold_bottom = self.ohlc[-1, Candle.CLOSE] * (1 - 0.05)
+        threshold_top = self.ohlc[-1, Candle.CLOSE] * (1 - 0.005)
         bollinger_bands_last_bottom_price = get_bollinger_bands(self.ohlc)[2,-1]
-        diff_relative = self.ohlc[-1, Candle.CLOSE]/bollinger_bands_last_bottom_price - 1
-        if diff_relative > threshold_top:
-            self.stop_loss = threshold_top
-        elif diff_relative < threshold_bottom:
-            self.stop_loss = threshold_bottom
+
+        # if in position, check if SL can be modified
+        if self.stop_loss is not None:
+            if bollinger_bands_last_bottom_price > self.stop_loss:
+                self.stop_loss = bollinger_bands_last_bottom_price
         else:
-            self.stop_loss = diff_relative
+            if bollinger_bands_last_bottom_price > threshold_top:
+                self.stop_loss = threshold_top
+            elif bollinger_bands_last_bottom_price < threshold_bottom:
+                self.stop_loss = threshold_bottom
+            else:
+                self.stop_loss = bollinger_bands_last_bottom_price
 
     def __set_quantity(self):
-        # TODO
-        # quantity es margin szamitasa
-        # ennek a fuggvenynek lehetne generikusabb neve, mivel mindket valtozot allitja. set_trade_parameters? nemtom
         1
-
-
-            
