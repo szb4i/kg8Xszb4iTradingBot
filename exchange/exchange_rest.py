@@ -4,11 +4,13 @@ from credentials import getBinanceKey, getBinanceSecretKey
 from constants import SYM, CANDLE_INTERVAL, HISTORICAL_DATA_RELATIVE_START_DATE
 import numpy as np
 from constants import SYM
+from logger.logger import Logger
 from binance.enums import SIDE_BUY, SIDE_SELL, FUTURE_ORDER_TYPE_MARKET, FUTURE_ORDER_TYPE_STOP_MARKET, TIME_IN_FORCE_GTC
 
 class ExchangeRest:
     def __init__(self) -> None:
         self.client=Client(getBinanceKey(), getBinanceSecretKey())
+        self.logger = Logger.get_singleton()
 
     def get_historical_ohlc(self):
         historical_klines = self.client.get_historical_klines(symbol = SYM, interval = CANDLE_INTERVAL, start_str=HISTORICAL_DATA_RELATIVE_START_DATE)

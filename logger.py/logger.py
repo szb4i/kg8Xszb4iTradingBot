@@ -1,1 +1,0 @@
-# ESSENTIAL!! every action should be logged with timestamp in a consistent way - e.g. TIMESTAMP | ACTION | PARAMS

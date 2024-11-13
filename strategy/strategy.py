@@ -4,6 +4,7 @@ from technical_analysis.ema import get_ema
 from technical_analysis.bollinger_bands import get_bollinger_bands
 from constants import Candle
 from exchange.exchange_rest import ExchangeRest
+from logger.logger import Logger
 
 CAPITAL_RISK = 0.03
 STOPLOSS_THRESHOLD_BOTTOM_RATIO = 0.05
@@ -11,12 +12,14 @@ STOPLOSS_THRESHOLD_TOP_RATIO = 0.005
 
 class Strategy:
     def __init__(self, historical_ohlc) -> None:
+        self.logger = Logger.get_singleton()
         self.ohlc = historical_ohlc
         self.__set_technical_indicators()
         self.exchange_rest = ExchangeRest()
         self.balance = self.exchange_rest.get_futures_usdc_balance()
         self.leverage = 6
         self.__set_default_trade_variables()
+        self.logger('Strategy class instance initialized')
 
     def __set_default_trade_variables(self):
         self.is_in_long = False
