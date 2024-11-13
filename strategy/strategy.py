@@ -16,8 +16,9 @@ class Strategy:
         self.exchange_rest = ExchangeRest()
         self.balance = self.exchange_rest.get_futures_usdc_balance()
         self.leverage = 6
+        self.__set_default_trade_variables()
 
-    def __set_variables_to_default(self):
+    def __set_default_trade_variables(self):
         self.is_in_long = False
         self.stop_loss = None
         self.is_trailing_stop_loss = False
@@ -51,7 +52,7 @@ class Strategy:
             self.__set_take_profit_virtual()
             self.__set_trailing_stop_loss_step_ratio()
             self.__set_quantity()
-            self.exchange_rest.open_long(self.quantity)
+            self.exchange_rest.open_long(self.quantity, self.stop_loss)
             self.is_in_long = True
             # TODO
             # 5. logolas, email kuldes
@@ -93,7 +94,7 @@ class Strategy:
         if current_price < self.stop_loss:
             # TODO
             # close_long fuggveny implementalasa az ExchangeRestben
-            self.__set_variables_to_default()
+            self.__set_default_trade_variables()
 
     def __set_stop_loss_live(self, current_price, is_candle_closing):
         # TODO
@@ -102,9 +103,11 @@ class Strategy:
             self.stop_loss = self.take_profit_virtual * (1 - self.trailing_stop_loss_step_ratio)
             self.take_profit_virtual = self.take_profit_virtual * (1 + self.trailing_stop_loss_step_ratio)
             self.is_trailing_stop_loss = True
+            self.exchange_rest.update_long(self.stop_loss)
         elif is_candle_closing and not self.is_trailing_stop_loss:
             bollinger_bands_last_bottom_price = self.bollinger_bands[2,-1]
             if bollinger_bands_last_bottom_price > self.stop_loss:
                 self.stop_loss = bollinger_bands_last_bottom_price
+                self.exchange_rest.update_long(self.stop_loss)
 
 
