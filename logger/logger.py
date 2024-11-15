@@ -1,5 +1,6 @@
 # ESSENTIAL!! every action should be logged with timestamp in a consistent way - e.g. TIMESTAMP | ACTION | PARAMS
 import logging
+import datetime
 
 class Logger:
     _instance = None
@@ -19,7 +20,8 @@ class Logger:
         # TODO
         # datum szerinti particionalas. file name: aznapi datum
         # historikus logokat szerverrol leszedni, hogy ne teljen meg a memoria
-        logging.basicConfig(filename='logger/logs/logs.log', encoding='utf-8', level=logging.DEBUG, format='%(asctime)s.%(msecs)03d | %(message)s', datefmt='%Y.%m.%d %H:%M:%S')
+        file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '.log'
+        logging.basicConfig(filename=file_name, encoding='utf-8', level=logging.DEBUG, format='%(asctime)s.%(msecs)03d | %(message)s', datefmt='%Y.%m.%d %H:%M:%S')
 
     def info(self, message):
         self.logger.info(message)
