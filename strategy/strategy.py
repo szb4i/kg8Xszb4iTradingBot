@@ -11,9 +11,9 @@ STOPLOSS_THRESHOLD_BOTTOM_RATIO = 0.05
 STOPLOSS_THRESHOLD_TOP_RATIO = 0.005
 
 class Strategy:
-    def __init__(self, historical_ohlc) -> None:
+    def __init__(self) -> None:
         self.logger = Logger.get_singleton()
-        self.ohlc = historical_ohlc
+        self.ohlc = self.exchange_rest.get_historical_ohlc()
         self.__set_technical_indicators()
         self.exchange_rest = ExchangeRest()
         self.balance = self.exchange_rest.get_futures_usdc_balance()
