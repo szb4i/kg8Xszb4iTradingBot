@@ -79,7 +79,7 @@ class Strategy:
             self.stop_loss = bollinger_bands_last_bottom_price
 
     def __set_take_profit_virtual(self):
-        self.take_profit_virtual = self.ohlc[-1, Candle.CLOSE.value] + (self.ohlc[-1, Candle.CLOSE.value] - self.stop_loss)
+        self.take_profit_virtual = self.ohlc[-1, Candle.CLOSE.value] + 1.05*(self.ohlc[-1, Candle.CLOSE.value] - self.stop_loss)
 
     def __set_trailing_stop_loss_step_ratio(self):
         self.trailing_stop_loss_step_ratio = 0.005
