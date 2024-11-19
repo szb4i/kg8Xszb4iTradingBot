@@ -2,7 +2,7 @@ import numpy as np
 from constants import Candle
 
 def get_ema(ohlc_array, window):
-    closes = ohlc_array[:, Candle.CLOSE]
+    closes = ohlc_array[:, Candle.CLOSE.value]
 
     alpha = 2 /(window + 1.0)
     alpha_rev = 1-alpha

@@ -17,18 +17,12 @@ class ExchangeRest:
         historical_klines = [[float(x) for x in kline[1:6]] for kline in historical_klines]
         return np.array(historical_klines)
     
-    def open_long(self, quantity, stop_loss):
+    def open_long(self, quantity):
         self.client.futures_create_order(symbol=SYM, side=SIDE_BUY, type=FUTURE_ORDER_TYPE_MARKET, quantity=quantity, isIsolated=True)
-        # TODO
-        # stop_loss-t folyamatosna frissiteni kellene. eloszor bollinger miatt, aztan a trailing sl miatt. megoldhato az, hogy toroljuk az elozo ordert, es helyette ujat hozunk letre? tehat frissitjuk a stop pricet?
 
-        self.client.futures_create_order(symbol=SYM,side=SIDE_SELL,type=FUTURE_ORDER_TYPE_STOP_MARKET,timeInForce=TIME_IN_FORCE_GTC,quantity=quantity,stopPrice=stop_loss, isIsolated=True)
-
-    def update_long(self, stop_loss):
-        # TODO
-        # ezt a fuggvenyt kene hivni, amikor csak a stoplosson valtoztatunk mar pozi kozben
-        1
+    def close_long(self, quantity):
+        self.client.futures_create_order(symbol=SYM, side=SIDE_SELL, type=FUTURE_ORDER_TYPE_MARKET, quantity=quantity, isIsolated=True)
 
     def get_futures_usdc_balance(self):
-        futures_usdc_balance = float(next((item['availableBalance'] for item in self.client.futures_account_balance() if item['asset'] == 'USDC'), 0))
+        futures_usdc_balance = float(next((item['availableBalance'] for item in self.client.futures_account_balance() if item['asset'] == 'BNFCR'), 0))
         return futures_usdc_balance

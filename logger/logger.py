@@ -21,8 +21,13 @@ class Logger:
         # datum szerinti particionalas. file name: aznapi datum
         # historikus logokat szerverrol leszedni, hogy ne teljen meg a memoria
         file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '.log'
-        logging.basicConfig(filename=file_name, encoding='utf-8', level=logging.DEBUG, format='%(asctime)s.%(msecs)03d | %(message)s', datefmt='%Y.%m.%d %H:%M:%S')
-        self.info('kg8Xszb4iTradingBot started running')
+        format = '%(asctime)s.%(msecs)03d | %(message)s'
+        logging.basicConfig(filename=file_name, encoding='utf-8', level=logging.INFO, format=format, datefmt='%Y.%m.%d %H:%M:%S')
+        console = logging.StreamHandler()
+        formatter = logging.Formatter(format)
+        console.setFormatter(formatter)
+        logging.getLogger('').addHandler(console)
+        self.info(self, 'kg8Xszb4iTradingBot started running')
 
     def info(self, message):
         self.logger.info(message)
