@@ -5,6 +5,7 @@ from technical_analysis.bollinger_bands import get_bollinger_bands
 from constants import Candle
 from exchange.exchange_rest import ExchangeRest
 from logger.logger import Logger
+from postman.postman import Postman
 
 CAPITAL_RISK = 0.03
 LEVERAGE = 10
@@ -14,6 +15,7 @@ STOPLOSS_THRESHOLD_TOP_RATIO = 0.005
 class Strategy:
     def __init__(self) -> None:
         self.logger = Logger.get_singleton()
+        self.postman = Postman.get_singleton()
         self.exchange_rest = ExchangeRest()
         self.ohlc = self.exchange_rest.get_historical_ohlc()
         self.balance = self.exchange_rest.get_futures_usdc_balance()
@@ -63,9 +65,7 @@ class Strategy:
             self.exchange_rest.open_long(self.quantity)
             self.is_in_long = True
             self.logger.info('long position opened')
-            # TODO
-            # 5. logolas, email kuldes
-            # 6. backtest
+            self.postman.send_email('Position Opened', 'Position Opened')
 
     def __set_stop_loss_init(self):
         threshold_bottom = self.ohlc[-1, Candle.CLOSE.value] * (1 - STOPLOSS_THRESHOLD_BOTTOM_RATIO)
@@ -93,14 +93,15 @@ class Strategy:
     def __manage_long_position(self, current_price, is_candle_closing):
         self.__close_long_position()
         if self.is_in_long:
-            self.logger.info('closing long position...')
             self.__set_stop_loss_live(current_price, is_candle_closing)
-            self.logger.info('long position closed')
 
     def __close_long_position(self, current_price):
         if current_price < self.stop_loss:
+            self.logger.info('closing long position...')
             self.exchange_rest.close_long(self.quantity)
             self.__set_default_trade_variables()
+            self.logger.info('long position closed')
+            self.postman.send_email('Position Closed', 'Position Closed')
 
     def __set_stop_loss_live(self, current_price, is_candle_closing):
         if current_price > self.take_profit_virtual:
