@@ -22,7 +22,7 @@ class Postman:
         self.sender_email = getPostmanSenderEmail()
         self.password = getPostmanSenderPassword()
         self.recipients = getPostmanRecipients()
-        self.send_email('kg8Xszb4iTradingBot started running', 'kg8Xszb4iTradingBot started running')
+        self.send_email(self, 'kg8Xszb4iTradingBot started running', 'kg8Xszb4iTradingBot started running')
 
     def send_email(self, subject, body):
         msg = MIMEMultipart()
