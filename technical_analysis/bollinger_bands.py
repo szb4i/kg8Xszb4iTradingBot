@@ -8,4 +8,4 @@ def get_bollinger_bands(ohlc_array, window=20, band_width=2):
     std = np.std([closes[i:i+window] for i in range(len(closes)-window+1)], axis=1)
     bb_top = sma + band_width*std
     bb_bottom = sma - band_width*std
-    return [bb_top, sma, bb_bottom]
+    return np.array([bb_top, sma, bb_bottom])
