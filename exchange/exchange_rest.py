@@ -18,10 +18,10 @@ class ExchangeRest:
         return np.array(historical_klines)
     
     def open_long(self, quantity):
-        self.client.futures_create_order(symbol=SYM, side=SIDE_BUY, type=FUTURE_ORDER_TYPE_MARKET, quantity=quantity, isIsolated=True)
+        self.client.futures_create_order(symbol=SYM, side=SIDE_BUY, type=FUTURE_ORDER_TYPE_MARKET, quantity=round(quantity, 2), isIsolated=True)
 
     def close_long(self, quantity):
-        self.client.futures_create_order(symbol=SYM, side=SIDE_SELL, type=FUTURE_ORDER_TYPE_MARKET, quantity=quantity, isIsolated=True)
+        self.client.futures_create_order(symbol=SYM, side=SIDE_SELL, type=FUTURE_ORDER_TYPE_MARKET, quantity=round(quantity, 2), isIsolated=True)
 
     def get_futures_usdc_balance(self):
         futures_usdc_balance = float(next((item['availableBalance'] for item in self.client.futures_account_balance() if item['asset'] == 'BNFCR'), 0))
