@@ -88,7 +88,7 @@ class Strategy:
         # a toke hany szazalekaval nyitunk poziciot, 0 es (100*leverage) % kozotti ertek
         position_size_pct_of_capital = min(CAPITAL_RISK / (1 - self.stop_loss / self.ohlc[-1, Candle.CLOSE.value]), LEVERAGE)
         position_size = position_size_pct_of_capital * self.usdc_capital
-        self.quantity = position_size
+        self.quantity = round(position_size, 5)
     
     def __manage_long_position(self, current_price, is_candle_closing):
         self.__close_long_position()
